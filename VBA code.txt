@@ -1,0 +1,101 @@
+List 1 - clickable cells to create green background
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    Dim selectedCell As Range
+    Dim selectedRow As Range
+    
+    Set selectedCell = Target
+    Set selectedRow = selectedCell.EntireRow
+    
+    ' Turn off the green color for all cells in the selected row
+    selectedRow.Interior.ColorIndex = xlNone
+    
+    ' Turn the clicked cell green
+    If Not Intersect(Target, Range("A49:F288")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+    
+    
+End Sub
+
+
+
+List 2 - green fields on click/counting values that have green background
+Sub CopyGreenCellValue()
+    Dim i As Integer, j As Integer, lastRow As Integer
+    lastRow = ActiveSheet.Cells(Rows.count, "B").End(xlUp).Row
+    
+    For i = 1 To lastRow
+        For j = 2 To 6 ' loop through columns B to F
+            If Cells(i, j).Interior.Color = vbGreen Then
+                Cells(i, 16).Value = Cells(i, j).Value
+            End If
+        Next j
+    Next i
+End Sub
+
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    Dim selectedCell As Range
+    Dim selectedRow As Range
+    
+    Set selectedCell = Target
+    Set selectedRow = selectedCell.EntireRow
+    
+    ' Turn off the green color for all cells in the selected row
+    selectedRow.Interior.ColorIndex = xlNone
+    
+    ' Turn the clicked cell green
+    If Not Intersect(Target, Range("A49:F288")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+    
+    If Not Intersect(Target, Range("G9:J9")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+    
+    If Not Intersect(Target, Range("G11:L11")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+    
+    If Not Intersect(Target, Range("K14:O14")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+    
+       If Not Intersect(Target, Range("L15:L16")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+    
+       If Not Intersect(Target, Range("N15:N16")) Is Nothing Then
+        selectedCell.Interior.Color = vbGreen
+    End If
+End Sub
+
+
+
+
+
+This Workbook - copying changes
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+    Dim dotaznikRange As Range
+    Dim vysledekRange As Range
+    Dim dotaznikCell As Range
+    Dim vysledekCell As Range
+    
+    Set dotaznikRange = Me.Worksheets("dotaznik").Range("B1:O290")
+    Set vysledekRange = Me.Worksheets("vysledek").Range("B1:O290")
+    
+    Application.ScreenUpdating = False
+    
+    ' Copy the background color of each green cell in "dotaznik" to the corresponding cell in "vysledek"
+    For Each dotaznikCell In dotaznikRange
+        If dotaznikCell.Interior.ColorIndex = 4 Then
+            Set vysledekCell = vysledekRange.Cells(dotaznikCell.Row, dotaznikCell.Column - 1)
+            vysledekCell.Interior.Color = vbGreen
+        End If
+        Set vysledekCell = vysledekRange.Cells(dotaznikCell.Row, dotaznikCell.Column - 1)
+    Next dotaznikCell
+    
+    Application.ScreenUpdating = True
+End Sub
+
+
+
