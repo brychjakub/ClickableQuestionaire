@@ -300,6 +300,8 @@ def on_cell_click(row, col):
 def count_hidden_values():
     total_hidden_value1 = 0
     total_hidden_value2 = 0
+    letters = "NEOPS"
+    letter_index = 0
     
     rows_to_check1 = [0, 30, 60, 90, 120, 150, 180, 210]
     rows_to_check2 = [i+1 for i in rows_to_check1]
@@ -314,7 +316,9 @@ def count_hidden_values():
                 total_hidden_value += hidden_values[i][current_col_selection]
             elif i in rows_to_check2 and current_col_selection != -1:
                 total_hidden_value += hidden_values[i][current_col_selection]
-        print(f"Value {', '.join([str(r+1) for r in rows_to_check])}: {total_hidden_value}")
+        letter = letters[letter_index % len(letters)]
+        print(f"{letter} with value {', '.join([str(r+1) for r in rows_to_check])}: {total_hidden_value}")
+        letter_index += 1
 
 
 # add more print statements for the remaining rows_to_check lists
