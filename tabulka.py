@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+import tkinter.messagebox as mbox
 import random
+import questionarie
 
 # Define the label values
 labels = ["VN", "SN", "N", "SV", "UV"]
@@ -11,6 +12,10 @@ canvas = tk.Canvas(root, borderwidth=0, background="#ffffff")
 frame = tk.Frame(canvas, background="#ffffff")
 vsb = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
 canvas.configure(yscrollcommand=vsb.set)
+
+# Bind mousewheel event to the canvas
+canvas.bind_all("<MouseWheel>", lambda event: canvas.yview_scroll(int(-1*(event.delta/120)), "units"))
+
 
 # Pack the scrollbar and canvas to the window
 vsb.pack(side="right", fill="y")
@@ -298,9 +303,6 @@ def on_cell_click(row, col):
 
 # Create a button to count the total hidden value of green cells
 def count_hidden_values():
-    total_hidden_value1 = 0
-    total_hidden_value2 = 0
-    
     rows_to_check1 = [0, 30, 60, 90, 120, 150, 180, 210]
     rows_to_check2 = [i+1 for i in rows_to_check1]
 
@@ -324,21 +326,36 @@ def count_hidden_values():
         print(f"Value {', '.join([str(r+1) for r in rows_to_check])}: {total_hidden_value} ({letter})")
 
     
+    letter_counts_dict = {}
 
 # Print the combined value for each letter
     print('Combined values:')
     for letter, count in letter_counts.items():
         print(f'{letter}: {count}')
+        letter_counts_dict[letter] = count
+    
+    return letter_counts_dict
 
 
-# add more print statements for the remaining rows_to_check lists
-# Create a button to count the total hidden value of green cells
-count_button = tk.Button(frame, text="Count hidden values", command=count_hidden_values)
+
+def count_hidden_values_confirmation():
+    # Show message box with "yes" and "no" buttons
+    confirm = mbox.askyesno("Confirmation", "Odpověděli jste všechny na otázky a chcete ukončit program?")
+
+    # If "yes" button is clicked, execute count_hidden_values function
+    if confirm:
+        count_hidden_values()
+        root.destroy()
+        questionarie.generate_pdf
+
+        
+
+count_button = tk.Button(frame, text="Ukončit", command=lambda: (count_hidden_values_confirmation()))
 count_button.grid(row=241, column=0, columnspan=6, pady=10)
-
 # Resize the canvas scroll region to fit the frame
 frame.update_idletasks()
 canvas.config(scrollregion=canvas.bbox("all"))
 
-# Create the main window
+
+
 root.mainloop()
